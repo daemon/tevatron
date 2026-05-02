@@ -13,7 +13,7 @@ from tevatron.retriever.arguments import ModelArguments, DataArguments, \
     TevatronTrainingArguments as TrainingArguments
 from tevatron.retriever.dataset import DistilTrainDataset
 from tevatron.retriever.collator import DistilTrainCollator
-from tevatron.retriever.modeling import DenseModel
+from tevatron.retriever.modeling import AdderModel, DenseModel
 from tevatron.retriever.trainer import DistilTevatronTrainer as DistilTrainer
 
 logger = logging.getLogger(__name__)
@@ -80,7 +80,14 @@ def main():
     else:
         torch_dtype = torch.float32
     
-    model = DenseModel.build(
+    model_cls = {
+        "dense": DenseModel,
+        "adder": AdderModel,
+    }.get(model_args.model_type)
+    if model_cls is None:
+        raise ValueError(f"Unsupported model_type: {model_args.model_type}")
+
+    model = model_cls.build(
         model_args,
         training_args,
         cache_dir=model_args.cache_dir,

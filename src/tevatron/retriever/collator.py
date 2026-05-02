@@ -1,12 +1,17 @@
+from __future__ import annotations
+
 import logging
 import torch
-from typing import List, Tuple
+from typing import List, Tuple, TYPE_CHECKING
 from dataclasses import dataclass
-from transformers import PreTrainedTokenizer, ProcessorMixin
+from transformers import PreTrainedTokenizer
 from qwen_omni_utils import process_mm_info
 from PIL import Image
 
 from tevatron.retriever.arguments import DataArguments
+
+if TYPE_CHECKING:
+    from transformers import ProcessorMixin
 
 
 logger = logging.getLogger(__name__)

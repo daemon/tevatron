@@ -178,5 +178,10 @@ class EncoderModel(nn.Module):
             )
         return model
 
-    def save(self, output_dir: str):
-        self.encoder.save_pretrained(output_dir)
+    def save(self, output_dir: str, state_dict=None, safe_serialization: bool = True):
+        if state_dict is None:
+            state_dict = self.state_dict()
+        prefix = 'encoder.'
+        assert all(k.startswith(prefix) for k in state_dict.keys()), list(state_dict.keys())
+        state_dict = {k[len(prefix):]: v for k, v in state_dict.items()}
+        self.encoder.save_pretrained(output_dir, state_dict=state_dict, safe_serialization=safe_serialization)

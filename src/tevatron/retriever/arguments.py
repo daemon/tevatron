@@ -78,6 +78,41 @@ class ModelArguments:
         },
     )
 
+    model_type: str = field(
+        default="dense",
+        metadata={"help": "Retriever model type. Supported values: dense, adder."}
+    )
+
+    adder_num_vectors: int = field(
+        default=32,
+        metadata={"help": "Number of fixed query/document vectors produced by Adder."}
+    )
+
+    adder_num_layers: int = field(
+        default=2,
+        metadata={"help": "Number of querying transformer decoder layers for Adder."}
+    )
+
+    adder_num_heads: Optional[int] = field(
+        default=None,
+        metadata={"help": "Number of attention heads in the Adder querying transformer. Defaults to the encoder config."}
+    )
+
+    adder_projection_dim: Optional[int] = field(
+        default=None,
+        metadata={"help": "Output dimension of each Adder vector. Defaults to the encoder hidden size."}
+    )
+
+    adder_dropout: float = field(
+        default=0.1,
+        metadata={"help": "Dropout used in the Adder querying transformer."}
+    )
+
+    adder_logsumexp_temperature: float = field(
+        default=1.0,
+        metadata={"help": "Temperature inside Adder's LogSumExp similarity."}
+    )
+
 
 @dataclass
 class DataArguments:

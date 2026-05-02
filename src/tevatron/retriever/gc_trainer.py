@@ -17,7 +17,10 @@ class SimpleContrastiveLoss:
             target_per_qry = y.size(0) // x.size(0)
             target = torch.arange(
                 0, x.size(0) * target_per_qry, target_per_qry, device=x.device, dtype=torch.long)
-        logits = torch.matmul(x, y.transpose(0, 1))
+        if x.dim() == 3 and y.dim() == 3:
+            logits = torch.logsumexp(torch.einsum("qvd,pvd->qpv", x, y), dim=-1)
+        else:
+            logits = torch.matmul(x, y.transpose(0, 1))
         return F.cross_entropy(logits, target, reduction=reduction)
 
 

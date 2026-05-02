@@ -19,7 +19,7 @@ from tevatron.retriever.arguments import ModelArguments, DataArguments, \
     TevatronTrainingArguments as TrainingArguments
 from tevatron.retriever.dataset import EncodeDataset
 from tevatron.retriever.collator import EncodeCollator
-from tevatron.retriever.modeling import EncoderOutput, DenseModel
+from tevatron.retriever.modeling import AdderModel, EncoderOutput, DenseModel
 
 logger = logging.getLogger(__name__)
 
@@ -64,15 +64,33 @@ def main():
     else:
         torch_dtype = torch.float32
     
-    model = DenseModel.load(
-        model_args.model_name_or_path,
-        pooling=model_args.pooling,
-        normalize=model_args.normalize,
-        lora_name_or_path=model_args.lora_name_or_path,
-        cache_dir=model_args.cache_dir,
-        torch_dtype=torch_dtype,
-        attn_implementation=model_args.attn_implementation,
-    )
+    model_cls = {
+        "dense": DenseModel,
+        "adder": AdderModel,
+    }.get(model_args.model_type)
+    if model_cls is None:
+        raise ValueError(f"Unsupported model_type: {model_args.model_type}")
+
+    model_load_kwargs = {
+        "pooling": model_args.pooling,
+        "normalize": model_args.normalize,
+        "lora_name_or_path": model_args.lora_name_or_path,
+        "cache_dir": model_args.cache_dir,
+        "torch_dtype": torch_dtype,
+        "attn_implementation": model_args.attn_implementation,
+    }
+    if model_args.model_type == "adder":
+        model_load_kwargs.update({
+            "temperature": model_args.temperature,
+            "num_vectors": model_args.adder_num_vectors,
+            "num_layers": model_args.adder_num_layers,
+            "num_heads": model_args.adder_num_heads,
+            "projection_dim": model_args.adder_projection_dim,
+            "dropout": model_args.adder_dropout,
+            "logsumexp_temperature": model_args.adder_logsumexp_temperature,
+        })
+
+    model = model_cls.load(model_args.model_name_or_path, **model_load_kwargs)
 
     encode_dataset = EncodeDataset(
         data_args=data_args,

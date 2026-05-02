@@ -1,0 +1,36 @@
+[project]
+name = "tevatron"
+version = "0.0.1"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "Apache-2.0" }
+dependencies = [
+    "accelerate~=1.13.0",
+    "datasets<4",
+    "deepspeed~=0.18.9",
+    "faiss-cpu>=1.13.2",
+    "fsspec==2023.9.2",
+    "gradcache",
+    "pillow~=12.1.1",
+    "pyarrow<21",
+    "qwen-omni-utils==0.0.9",
+    "torch==2.7.1+cu118",
+    "torchaudio==2.7.1+cu118",
+    "torchvision==0.22.1+cu118",
+    "transformers<5",
+]
+
+[tool.uv.sources]
+gradcache = { git = "https://github.com/luyug/GradCache.git" }
+
+[[tool.uv.index]]
+url = "https://download.pytorch.org/whl/cu118"
+
+[[tool.uv.index]]
+url = "https://pypi.org/simple"
+default = true
+
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"

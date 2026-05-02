@@ -31,15 +31,12 @@ class TevatronTrainer(Trainer):
         else:
             if state_dict is None:
                 state_dict = self.model.state_dict()
-            prefix = 'encoder.'
-            assert all(k.startswith(prefix) for k in state_dict.keys()), list(state_dict.keys())
-            state_dict = {k[len(prefix):]: v for k, v in state_dict.items()}
-            self.model.encoder.save_pretrained(
-                output_dir, state_dict=state_dict, safe_serialization=self.args.save_safetensors
-            )
+            safe_serialization = getattr(self.args, "save_safetensors", True)
+            self.model.save(output_dir, state_dict=state_dict, safe_serialization=safe_serialization)
 
-        if self.tokenizer is not None:
-            self.tokenizer.save_pretrained(output_dir)
+        tokenizer = getattr(self, "tokenizer", None)
+        if tokenizer is not None:
+            tokenizer.save_pretrained(output_dir)
 
         # Good practice: save your training arguments together with the trained model
         torch.save(self.args, os.path.join(output_dir, TRAINING_ARGS_NAME))
