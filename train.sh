@@ -1,24 +1,24 @@
-deepspeed --include localhost:0,1 --master_port 61000 --module tevatron.retriever.driver.train \
+deepspeed --include localhost:0,1,2,3 --master_port 61000 --module tevatron.retriever.driver.train \
   --deepspeed deepspeed/ds_zero3_config.json \
-  --output_dir retriever-bert-adder \
+  --output_dir retriever-bert-adder-more \
   --model_type adder \
   --model_name_or_path bert-base-uncased \
-  --save_steps 2500 \
+  --save_steps 25000 \
   --dataset_name Tevatron/msmarco-passage-aug \
   --query_prefix "Query: " \
   --passage_prefix "Passage: " \
   --bf16 \
   --normalize \
   --temperature 0.01 \
-  --adder_num_vectors 40 \
+  --adder_num_vectors 48 \
   --adder_num_layers 2 \
   --adder_logsumexp_temperature 0.5 \
-  --per_device_train_batch_size 16 \
+  --per_device_train_batch_size 8 \
   --train_group_size 16 \
   --adder_projection_dim 128 \
   --learning_rate 1e-5 \
   --query_max_len 32 \
   --passage_max_len 180 \
-  --num_train_epochs 6 \
+  --num_train_epochs 5 \
   --logging_steps 10 \
   --attn_implementation sdpa
