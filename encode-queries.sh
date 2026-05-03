@@ -1,7 +1,7 @@
 CUDA_VISIBLE_DEVICES=0 python -m tevatron.retriever.driver.encode \
   --output_dir temp \
   --model_type adder \
-  --model_name_or_path retriever-bert-adder \
+  --model_name_or_path retriever-bert-adder-more \
   --query_prefix "Query: " \
   --bf16 \
   --normalize \
@@ -11,6 +11,6 @@ CUDA_VISIBLE_DEVICES=0 python -m tevatron.retriever.driver.encode \
   --passage_max_len 180 \
   --dataset_name json \
   --dataset_path /data/hf-cache/datasets/downloads/bcac13e85e0ad7aadc03ba2a10a4ff6b5e9fc3866348ed139a17ecb3b13c1cf8 \
-  --dataset_split validation \
-  --encode_output_path embeddings-adder/query-dev.pkl \
+  --dataset_split train \
+  --encode_output_path embeddings-adder-more/query-dev.pkl \
   --attn_implementation sdpa

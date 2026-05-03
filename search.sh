@@ -1,4 +1,4 @@
-EMBEDDING_OUTPUT_DIR=embeddings-adder
+EMBEDDING_OUTPUT_DIR=embeddings-adder-more
 
 set -f && python -m tevatron.retriever.driver.search \
   --query_reps $EMBEDDING_OUTPUT_DIR/query-dev.pkl \

@@ -1,6 +1,6 @@
 deepspeed --include localhost:0,1,2,3 --master_port 61000 --module tevatron.retriever.driver.train \
   --deepspeed deepspeed/ds_zero3_config.json \
-  --output_dir retriever-bert-adder-more \
+  --output_dir $1 \
   --model_type adder \
   --model_name_or_path bert-base-uncased \
   --save_steps 25000 \
@@ -10,7 +10,7 @@ deepspeed --include localhost:0,1,2,3 --master_port 61000 --module tevatron.retr
   --bf16 \
   --normalize \
   --temperature 0.01 \
-  --adder_num_vectors 48 \
+  --adder_num_vectors ${2:-40} \
   --adder_num_layers 2 \
   --adder_logsumexp_temperature 0.5 \
   --per_device_train_batch_size 8 \
@@ -19,6 +19,6 @@ deepspeed --include localhost:0,1,2,3 --master_port 61000 --module tevatron.retr
   --learning_rate 1e-5 \
   --query_max_len 32 \
   --passage_max_len 180 \
-  --num_train_epochs 5 \
+  --num_train_epochs 3 \
   --logging_steps 10 \
   --attn_implementation sdpa
