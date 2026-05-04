@@ -1,6 +1,5 @@
 #!/usr/bin/env zsh
 set -e
-EMBEDDING_OUTPUT_DIR=embeddings-adder-more
 
 run_shard() {
   local s=$1
@@ -9,7 +8,7 @@ run_shard() {
   CUDA_VISIBLE_DEVICES=$gpu python -m tevatron.retriever.driver.encode \
     --output_dir temp \
     --model_type adder \
-    --model_name_or_path retriever-bert-adder-more \
+    --model_name_or_path $MODEL_NAME \
     --query_prefix "Query: " \
     --passage_prefix "Passage: " \
     --bf16 \
