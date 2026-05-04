@@ -1,0 +1,4 @@
+mkdir -p /data/hf-cache /data/tmp
+export HF_HOME=/data/hf-cache
+export HF_DATASETS_CACHE=/data/hf-cache/datasets
+export TRANSFORMERS_CACHE=/data/hf-cache/
